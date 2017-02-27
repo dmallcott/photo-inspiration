@@ -1,29 +1,138 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'com.getkeepsafe.dexcount'
+apply plugin: 'spoon'
+apply plugin: 'net.ltgt.errorprone'
+apply plugin: 'findbugs'
+apply plugin: 'hu.supercluster.paperwork'
+
+apply from: '../config/findbugs.gradle'
+apply from: '../config/pmd.gradle'
+apply from: '../config/jacoco.gradle'
+apply from: '../config/checkstyle.gradle'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion versions.androidCompileSdk
+    buildToolsVersion versions.androidBuildTools
+
     defaultConfig {
-        applicationId "com.dmallcott.photoinspiration"
-        minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        final String packageName = "com.dmallcott.photoinspiration"
+
+        applicationId packageName
+        minSdkVersion versions.androidMinSdk
+        targetSdkVersion versions.androidTargetSdk
+        versionCode 1000000
+        versionName "1.0.0"
+        testInstrumentationRunner packageName + ".application.ApplicationTestRunner"
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    signingConfigs {
+        def keystoreProperties = getProperties("keystore.properties")
+
+        debug {
+            storeFile file(keystoreProperties["DEBUG_KEYSTORE_FILE"])
+            storePassword keystoreProperties["DEBUG_KEYSTORE_PASSWORD"]
+            keyAlias keystoreProperties["DEBUG_KEY_ALIAS"]
+            keyPassword keystoreProperties["DEBUG_KEY_PASSWORD"]
+        }
+        release {
+            storeFile file(keystoreProperties["RELEASE_KEYSTORE_FILE"])
+            storePassword keystoreProperties["RELEASE_KEYSTORE_PASSWORD"]
+            keyAlias keystoreProperties["RELEASE_KEY_ALIAS"]
+            keyPassword keystoreProperties["RELEASE_KEY_PASSWORD"]
+        }
+    }
+
     buildTypes {
+        debug {
+            versionNameSuffix " Debug"
+            applicationIdSuffix ".debug"
+
+            debuggable true
+            testCoverageEnabled true
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    compile library.androidSupportAppCompat
+    compile library.androidSupportDesign
+    compile library.androidSupportRecyclerView
+
+    compile library.dagger
+    annotationProcessor library.daggerCompiler
+
+    provided library.autoValue
+    annotationProcessor library.autoValue
+
+    debugCompile library.leakCanary
+    releaseCompile library.leakCanaryNoOp
+    testCompile library.leakCanaryNoOp
+
+    compile library.stetho
+
+    compile library.timber
+
+    compile library.butterknife
+    annotationProcessor library.butterknifeCompiler
+
+    compile library.rxJava
+    compile library.rxJavaInterop
+    compile library.rxAndroid
+    compile library.rxLint
+    compile library.rxBinding
+
+    compile library.gson
+    annotationProcessor library.autoValueGson
+    provided library.autoValueGson
+
+    compile library.picasso
+
+    testCompile library.jUnit
+    testCompile library.mockito
+
+    androidTestCompile(library.espressoCore) {
         exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    testCompile 'junit:junit:4.12'
+    }
+    androidTestAnnotationProcessor library.daggerCompiler
+    androidTestCompile library.spoon
+    androidTestCompile(name: 'cloudtestingscreenshotter_lib', ext: 'aar')
+
+    compile library.firebase
+}
+
+spoon {
+    debug = true
+    sequential = true
+    grantAllPermissions = true
+}
+
+dexcount {
+    format = "list"
+    includeClasses = false
+    includeFieldCount = true
+    includeTotalMethodCount = true
+    orderByMethodCount = false
+    verbose = false
+    maxTreeDepth = Integer.MAX_VALUE
+    runOnEachAssemble = false
+}
+
+def getProperties(String propertiesFileName) {
+    def propertiesFile = rootProject.file(propertiesFileName);
+    def properties = new Properties()
+    properties.load(new FileInputStream(propertiesFile))
+    return properties
 }

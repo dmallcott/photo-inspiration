@@ -1,11 +1,25 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+apply from: 'dependency.gradle'
 
 buildscript {
+    apply from: 'dependency.gradle'
+
     repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.0-rc1'
+        classpath plugin.android
+        classpath plugin.retrolambda
+        classpath plugin.spoon
+        classpath plugin.errorProne
+        classpath plugin.dexCount
+        classpath plugin.jacoco
+        classpath plugin.paperwork
+        classpath plugin.apt
+        classpath plugin.googleServices
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -15,9 +29,22 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven {
+            url "https://jitpack.io"
+        }
+        flatDir {
+            dirs '../aars'
+        }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+subprojects {
+    afterEvaluate {
+        tasks.findByName('findbugs').dependsOn('assemble')
+        tasks.findByName('pmd').dependsOn('assemble')
+    }
 }
