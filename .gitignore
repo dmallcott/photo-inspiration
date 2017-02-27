@@ -47,6 +47,9 @@ captures/
 keystore.properties
 api.properties
 
+# General properties files
+api.properties
+
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
 

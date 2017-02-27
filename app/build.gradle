@@ -24,6 +24,8 @@ android {
         versionCode 1000000
         versionName "1.0.0"
         testInstrumentationRunner packageName + ".application.ApplicationTestRunner"
+
+        buildConfigField "String", "PEXELS_API_KEY", getProperties("api.properties")["PEXELS_API_KEY"]
     }
 
     compileOptions {
@@ -111,6 +113,11 @@ dependencies {
     androidTestCompile(name: 'cloudtestingscreenshotter_lib', ext: 'aar')
 
     compile library.firebase
+
+    compile library.retrofit
+    compile library.retrofitGsonConverter
+    compile library.retrofitRxJavaAdapter
+    compile library.retrofitLoggingInterceptor
 }
 
 spoon {
