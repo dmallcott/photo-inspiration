@@ -29,7 +29,7 @@ public abstract class Photo {
   }
 
   @AutoValue
-  static abstract class Sources {
+  public static abstract class Sources {
 
     public abstract String original();
 
