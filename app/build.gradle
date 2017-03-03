@@ -32,7 +32,7 @@ android {
     }
 
     signingConfigs {
-        def keystoreProperties = getProperties("keystore.properties")
+        final keystoreProperties = getProperties("keystore.properties")
 
         debug {
             storeFile file(keystoreProperties["DEBUG_KEYSTORE_FILE"])
