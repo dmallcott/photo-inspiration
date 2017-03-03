@@ -7,7 +7,9 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class BasePresenter<T extends BaseView> {
-  private CompositeDisposable disposables;
+
+  private final CompositeDisposable attachedDisposables = new CompositeDisposable();
+  private final CompositeDisposable visibleDisposables = new CompositeDisposable();
   private T view;
 
   protected BasePresenter() {
@@ -21,7 +23,7 @@ public class BasePresenter<T extends BaseView> {
    */
   @CallSuper
   public void onViewAttached(@NonNull final T view) {
-    if (this.view != null) {
+    if (isViewAttached()) {
       throw new IllegalStateException(
           "View " + this.view + " is already attached. Cannot attach " + view);
     }
@@ -35,17 +37,29 @@ public class BasePresenter<T extends BaseView> {
    */
   @CallSuper
   public void onViewDetached() {
-    if (view == null) {
+    if (!isViewAttached()) {
       throw new IllegalStateException("View is already detached");
     }
     view = null;
+    attachedDisposables.clear();
 
-    if (disposables != null) {
-      disposables.dispose();
-      disposables = null;
-      Timber.i("Subscriptions disposed off");
-    }
     Timber.i("View detached");
+  }
+
+  /**
+   * On view will show. Called when your view is about to be seen on the screen.
+   */
+  @CallSuper
+  public void onViewWillShow(@NonNull final T view) {
+
+  }
+
+  /**
+   * On view will hide. Called when your view is about to hide from the screen.
+   */
+  @CallSuper
+  public void onViewWillHide() {
+    visibleDisposables.clear();
   }
 
   /**
@@ -55,17 +69,19 @@ public class BasePresenter<T extends BaseView> {
    */
   @CallSuper
   protected void disposeOnViewDetach(@NonNull final Disposable disposable) {
-    if (disposables == null) {
-      disposables = new CompositeDisposable();
-    }
-    disposables.add(disposable);
+    attachedDisposables.add(disposable);
+  }
+
+  /**
+   * Dispose on view will hide.
+   *
+   * @param disposable Disposable to be disposed of upon view will hide
+   */
+  protected void disposeOnViewWillHide(@NonNull final Disposable disposable) {
+    visibleDisposables.add(disposable);
   }
 
   public boolean isViewAttached() {
-    return view != null;
-  }
-
-  public T getView() {
-    return view;
+    return this.view != null;
   }
 }
