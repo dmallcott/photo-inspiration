@@ -12,17 +12,18 @@ import io.reactivex.observers.TestObserver;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import io.reactivex.schedulers.Schedulers;
 
 public class PexelsManagerTest {
 
   @Mock PexelsService service;
 
-  PexelsManager manager;
+  private PexelsManager manager;
 
   @Before
   public void setUp() throws Exception {
     initMocks(this);
-    manager = new PexelsManager(service);
+    manager = new PexelsManager(service, Schedulers.trampoline());
   }
 
   @Test

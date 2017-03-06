@@ -17,8 +17,6 @@ public abstract class PhotosResponse {
 
   public abstract int total_results();
 
-  public abstract String url();
-
   @Nullable
   public abstract String prev_page();
 
@@ -28,9 +26,9 @@ public abstract class PhotosResponse {
   public abstract List<Photo> photos();
 
   public static PhotosResponse create(final int page, final int per_page, final int total_results,
-      @NonNull final String url, @NonNull final String prev_page, @NonNull final String next_page,
+      @NonNull final String prev_page, @NonNull final String next_page,
       @NonNull final List<Photo> photos) {
-    return new AutoValue_PhotosResponse(page, per_page, total_results, url, prev_page, next_page,
+    return new AutoValue_PhotosResponse(page, per_page, total_results, prev_page, next_page,
         photos);
   }
 
