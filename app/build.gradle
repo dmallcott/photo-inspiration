@@ -76,6 +76,11 @@ android {
             java.srcDir commonTestDir
         }
     }
+
+    // Required for RxJava 1 and 2 coexistence
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {
@@ -127,7 +132,9 @@ dependencies {
     compile library.retrofit
     compile library.retrofitGsonConverter
     compile library.retrofitRxJavaAdapter
-    compile library.retrofitLoggingInterceptor
+
+    compile library.okhttp
+    compile library.okhttpLoggingInterceptor
 }
 
 spoon {
