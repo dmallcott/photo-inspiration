@@ -5,6 +5,7 @@ import com.dmallcott.photoinspiration.application.ApplicationModule;
 import com.dmallcott.photoinspiration.base.BaseActivityScope;
 import com.dmallcott.photoinspiration.base.BasePresenter;
 import com.dmallcott.photoinspiration.base.BaseView;
+import com.dmallcott.photoinspiration.data.JsonManager;
 import com.dmallcott.photoinspiration.data.PexelsManager;
 import com.dmallcott.photoinspiration.data.json.PhotosResponse;
 import com.dmallcott.photoinspiration.data.model.Message;
@@ -22,12 +23,16 @@ public class MainPresenter extends BasePresenter<View> {
 
   @NonNull private final PexelsManager pexelsManager;
   @NonNull private final Scheduler uiScheduler;
+  private final List<Message> messages;
 
   @Inject
   public MainPresenter(@NonNull final PexelsManager pexelsManager,
+      @NonNull final JsonManager jsonManager,
       @Named(ApplicationModule.UI_SCHEDULER) @NonNull final Scheduler uiScheduler) {
+
     this.pexelsManager = pexelsManager;
     this.uiScheduler = uiScheduler;
+    this.messages = jsonManager.getMessages();
   }
 
   @Override
@@ -37,7 +42,16 @@ public class MainPresenter extends BasePresenter<View> {
     disposeOnViewDetach(
         view.onPageRequested()
             .startWith(1)
-            .doOnNext(ignored -> view.showLoading(Message.create("WELCOME", "Looking lovely as ever")))
+            .doOnNext(current -> {
+              final int i = (current - 1) % messages.size();
+
+              if (current > 1 && i == 0) {
+                // TODO: Hardcoding this behaviour for the moment
+                view.showLoading(Message.create("HEY AGAIN", "Ready for more inspiration?"));
+              } else {
+                view.showLoading(messages.get(i));
+              }
+            })
             .switchMap(pexelsManager::getPopularPhotos)
             .doOnError(Timber::e)
             .onErrorResumeNext(Observable.empty())

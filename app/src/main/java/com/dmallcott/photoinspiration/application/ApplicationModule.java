@@ -2,7 +2,9 @@ package com.dmallcott.photoinspiration.application;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
+import com.dmallcott.photoinspiration.data.JsonManager;
 import com.dmallcott.photoinspiration.data.json.ApplicationAdapterFactory;
 import com.dmallcott.photoinspiration.data.service.PexelsService;
 import com.google.gson.Gson;
@@ -57,5 +59,15 @@ public class ApplicationModule {
   @Named(UI_SCHEDULER)
   Scheduler provideUiScheduler() {
     return AndroidSchedulers.mainThread();
+  }
+
+  @Provides
+  AssetManager provideAssetManager(Context context) {
+    return context.getAssets();
+  }
+
+  @Provides
+  JsonManager provideJsonManager(AssetManager assetManager, Gson gson) {
+    return new JsonManager(assetManager, gson);
   }
 }
