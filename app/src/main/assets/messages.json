@@ -1,26 +1,38 @@
 [
   {
     "header": "WELCOME",
-    "body": "Ready for some inspiration?"
+    "body": "Ready for some inspiration?",
+    "startColor": "#8BFCFE",
+    "endColor": "#64A1FF"
   },
   {
     "header": "HEY",
-    "body": "You are stronger than you think"
+    "body": "You are stronger than you think",
+    "startColor": "#FFC061",
+    "endColor": "#FF8CB3"
   },
   {
     "header": "REMEMBER",
-    "body": "I can and I will"
+    "body": "I can and I will",
+    "startColor": "#F095FF",
+    "endColor": "#F64848"
   },
   {
     "header": "SMILE",
-    "body": "Mistakes are proof that you're trying"
+    "body": "Mistakes are proof that you're trying",
+    "startColor": "#E8C3FD",
+    "endColor": "#86C5FC"
   },
   {
-    "header": "HEY",
-    "body": "Reject common sense to make the impossible possible"
+    "header": "SOME ADVICE",
+    "body": "Reject common sense to make the impossible possible",
+    "startColor": "#9ABDEB",
+    "endColor": "#80F9B7"
   },
   {
-    "header": "REMEMBER",
-    "body": "Keep on dreaming"
+    "header": "SIMPLE WORDS",
+    "body": "Keep on dreaming",
+    "startColor": "#D278F2",
+    "endColor": "#FCC989"
   }
 ]

@@ -68,8 +68,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
       ((MainViewHolder) holder).photo.setPhoto((Photo) dataSet.get(position));
     } else if (holder instanceof GradientViewHolder) {
       ((GradientViewHolder) holder).gradient.setFirst(position == 0);
-      ((GradientViewHolder) holder).gradient.setHeader(((Message) dataSet.get(position)).header());
-      ((GradientViewHolder) holder).gradient.setBody(((Message) dataSet.get(position)).body());
+      ((GradientViewHolder) holder).gradient.setMessage(((Message) dataSet.get(position)));
     }
   }
 

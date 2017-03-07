@@ -8,13 +8,14 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Shader.TileMode;
 import android.graphics.Typeface;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import com.dmallcott.photoinspiration.data.model.Message;
 import java.util.Random;
 import timber.log.Timber;
 
@@ -33,11 +34,10 @@ public class MaskedGradientView extends View {
   private final TextPaint textPaint;
   private final TextPaint bodyPaint;
 
-  private String header;
-  private String body;
+  private final boolean isInverted;
 
   private boolean isFirst = false;
-  private final boolean isInverted;
+  private Message message;
 
   public MaskedGradientView(Context context) {
     this(context, null);
@@ -77,8 +77,9 @@ public class MaskedGradientView extends View {
 
     final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
-    pathPaint.setShader(new LinearGradient(0, 0, widthSize, 0, Color.parseColor("#8BFCFE"),
-        Color.parseColor("#64A1FF"), TileMode.CLAMP));
+    pathPaint.setShader(new LinearGradient(0, 0, widthSize, 0,
+        Color.parseColor(message.startColor()), Color.parseColor(message.endColor()),
+        TileMode.CLAMP));
 
     // Based on a predetermined ratio the size is calculated from the 'match_parent' width
     setMeasuredDimension(widthSize, Math.round(widthSize / ratio));
@@ -92,14 +93,14 @@ public class MaskedGradientView extends View {
     canvas.drawPath(getPath(), shadowPaint);
     canvas.drawPath(getPath(), pathPaint);
 
-    // Adding text and aligning to the center
-    if (!TextUtils.isEmpty(header)) {
-      StaticLayout headerlayout = new StaticLayout(header, textPaint, canvas.getWidth(),
+    if (message != null) {
+      // Adding text and aligning to the center
+      StaticLayout headerlayout = new StaticLayout(message.header(), textPaint, canvas.getWidth(),
           Alignment.ALIGN_CENTER, 1.0f, 0, false);
       canvas.translate((canvas.getWidth() / 2) - (headerlayout.getWidth() / 2),
           (canvas.getHeight() / 2) - ((headerlayout.getHeight() / 2)));
       headerlayout.draw(canvas);
-      StaticLayout bodyLayout = new StaticLayout(body, bodyPaint, canvas.getWidth(),
+      StaticLayout bodyLayout = new StaticLayout(message.body(), bodyPaint, canvas.getWidth(),
           Alignment.ALIGN_CENTER, 1.0f, 0, false);
       canvas.translate(0, headerlayout.getHeight());
       bodyLayout.draw(canvas);
@@ -137,12 +138,9 @@ public class MaskedGradientView extends View {
     return path;
   }
 
-  public void setHeader(String header) {
-    this.header = header;
-  }
-
-  public void setBody(String body) {
-    this.body = body;
+  public void setMessage(@NonNull final Message message) {
+    this.message = message;
+    invalidate();
   }
 
   public void setFirst(boolean first) {

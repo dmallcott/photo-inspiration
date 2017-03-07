@@ -47,7 +47,8 @@ public class MainPresenter extends BasePresenter<View> {
 
               if (current > 1 && i == 0) {
                 // TODO: Hardcoding this behaviour for the moment
-                view.showLoading(Message.create("HEY AGAIN", "Ready for more inspiration?"));
+                view.showLoading(Message
+                    .create("HEY AGAIN", "Ready for more inspiration?", "#8BFCFE", "#64A1FF"));
               } else {
                 view.showLoading(messages.get(i));
               }
