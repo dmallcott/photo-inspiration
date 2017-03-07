@@ -37,6 +37,7 @@ public class MaskedImageView extends MaskedGradientView {
     super(context, attrs);
 
     imagePaint = new Paint();
+    imagePaint.setColor(Color.WHITE);
     pathPaint = new Paint();
     pathPaint.setShadowLayer(SHADOW_HEIGHT, 0f, 0f, Color.BLACK);
 
@@ -91,11 +92,12 @@ public class MaskedImageView extends MaskedGradientView {
   @Override
   protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
-
+    
     if (bitmap != null) {
       Timber.i("Drawing %s", photo.url());
-//      canvas.drawPath(getPath(), pathPaint);
       canvas.drawBitmap(processImage(bitmap), 0, 0, imagePaint);
+    } else {
+      canvas.drawPath(getPath(), imagePaint);
     }
   }
 
@@ -113,7 +115,11 @@ public class MaskedImageView extends MaskedGradientView {
   }
 
   public void setPhoto(@NonNull final Photo photo) {
+    if (this.photo != null) {
+      Picasso.with(getContext()).cancelRequest(target);
+    }
     this.photo = photo;
+    bitmap = null;
     invalidate();
   }
 
