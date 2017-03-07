@@ -37,6 +37,7 @@ public class MaskedGradientView extends View {
   private String body;
 
   private boolean isFirst = false;
+  private final boolean isInverted;
 
   public MaskedGradientView(Context context) {
     this(context, null);
@@ -46,7 +47,10 @@ public class MaskedGradientView extends View {
     super(context, attrs);
 
     ratio = 1.78f; // 16:9
-    slope = new Random().nextFloat() * (OFFSET - MINIMUM_SLOPE) + MINIMUM_SLOPE;
+
+    final Random random = new Random();
+    slope = random.nextFloat() * (OFFSET - MINIMUM_SLOPE) + MINIMUM_SLOPE;
+    isInverted = random.nextBoolean();
 
     pathPaint = new Paint();
     pathPaint.setAntiAlias(true);
@@ -106,6 +110,7 @@ public class MaskedGradientView extends View {
 
     Path path = new Path();
 
+    // TODO : find a better way than this ugly conditional
     if (isFirst) {
       path.moveTo(0, 0);
       path.lineTo(0, getHeight());
@@ -113,12 +118,19 @@ public class MaskedGradientView extends View {
       path.lineTo(getWidth(), 0);
       path.lineTo(0, 0);
       path.close();
-    } else {
+    } else if (!isInverted) {
       path.moveTo(0, SHADOW_HEIGHT);
       path.lineTo(0, getHeight());
       path.lineTo(getWidth(), getHeight());
       path.lineTo(getWidth(), slope);
       path.lineTo(0, SHADOW_HEIGHT);
+      path.close();
+    } else {
+      path.moveTo(getWidth(), SHADOW_HEIGHT);
+      path.lineTo(getWidth(), getHeight());
+      path.lineTo(0, getHeight());
+      path.lineTo(0, slope);
+      path.lineTo(getWidth(), SHADOW_HEIGHT);
       path.close();
     }
 
