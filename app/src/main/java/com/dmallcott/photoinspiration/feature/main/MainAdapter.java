@@ -69,7 +69,7 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     } else if (holder instanceof GradientViewHolder) {
       ((GradientViewHolder) holder).gradient.setFirst(position == 0);
       ((GradientViewHolder) holder).gradient.setHeader(((Message) dataSet.get(position)).header());
-      ((GradientViewHolder) holder).gradient.setBody(((Message) dataSet.get(position)).message());
+      ((GradientViewHolder) holder).gradient.setBody(((Message) dataSet.get(position)).body());
     }
   }
 

@@ -10,10 +10,10 @@ public abstract class Message {
 
   public abstract String header();
 
-  public abstract String message();
+  public abstract String body();
 
-  public static Message create(@NonNull final String header, @NonNull final String message) {
-    return new AutoValue_Message(header, message);
+  public static Message create(@NonNull final String header, @NonNull final String body) {
+    return new AutoValue_Message(header, body);
   }
 
   public static TypeAdapter<Message> typeAdapter(Gson gson) {
