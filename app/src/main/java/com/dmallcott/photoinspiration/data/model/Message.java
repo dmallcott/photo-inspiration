@@ -12,8 +12,13 @@ public abstract class Message {
 
   public abstract String body();
 
-  public static Message create(@NonNull final String header, @NonNull final String body) {
-    return new AutoValue_Message(header, body);
+  public abstract String startColor();
+
+  public abstract String endColor();
+
+  public static Message create(@NonNull final String header, @NonNull final String body,
+      @NonNull final String startColor, @NonNull final String endColor) {
+    return new AutoValue_Message(header, body, startColor, endColor);
   }
 
   public static TypeAdapter<Message> typeAdapter(Gson gson) {
