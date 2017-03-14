@@ -5,7 +5,7 @@ import com.dmallcott.photoinspiration.application.ApplicationModule;
 import com.dmallcott.photoinspiration.base.BaseActivityScope;
 import com.dmallcott.photoinspiration.base.BasePresenter;
 import com.dmallcott.photoinspiration.base.BaseView;
-import com.dmallcott.photoinspiration.data.JsonManager;
+import com.dmallcott.photoinspiration.data.LocalAssetsManager;
 import com.dmallcott.photoinspiration.data.PexelsManager;
 import com.dmallcott.photoinspiration.data.json.PhotosResponse;
 import com.dmallcott.photoinspiration.data.model.Message;
@@ -27,12 +27,12 @@ public class MainPresenter extends BasePresenter<View> {
 
   @Inject
   public MainPresenter(@NonNull final PexelsManager pexelsManager,
-      @NonNull final JsonManager jsonManager,
+      @NonNull final LocalAssetsManager localAssetsManager,
       @Named(ApplicationModule.UI_SCHEDULER) @NonNull final Scheduler uiScheduler) {
 
     this.pexelsManager = pexelsManager;
     this.uiScheduler = uiScheduler;
-    this.messages = jsonManager.getMessages();
+    this.messages = localAssetsManager.getMessages();
   }
 
   @Override

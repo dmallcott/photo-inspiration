@@ -3,7 +3,7 @@ package com.dmallcott.photoinspiration.application;
 import android.content.Context;
 import android.content.res.AssetManager;
 import com.dmallcott.photoinspiration.base.BaseComponent;
-import com.dmallcott.photoinspiration.data.JsonManager;
+import com.dmallcott.photoinspiration.data.LocalAssetsManager;
 import com.dmallcott.photoinspiration.data.PexelsManager;
 import dagger.Component;
 import io.reactivex.Scheduler;
@@ -20,7 +20,7 @@ public interface ApplicationComponent extends BaseComponent {
 
   AssetManager assetManager();
 
-  JsonManager jsonManager();
+  LocalAssetsManager localAssetsManager();
 
   @Named(ApplicationModule.IO_SCHEDULER)
   Scheduler ioScheduler();
