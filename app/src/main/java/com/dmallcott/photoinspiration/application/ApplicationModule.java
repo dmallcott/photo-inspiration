@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
 import com.dmallcott.photoinspiration.data.LocalAssetsManager;
+import com.dmallcott.photoinspiration.data.PhotosRepository;
 import com.dmallcott.photoinspiration.data.json.ApplicationAdapterFactory;
 import com.dmallcott.photoinspiration.data.service.PexelsService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dagger.Module;
 import dagger.Provides;
+import io.paperdb.Paper;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -69,5 +71,11 @@ public class ApplicationModule {
   @Provides
   LocalAssetsManager provideJLocalAssetsManager(AssetManager assetManager, Gson gson) {
     return new LocalAssetsManager(assetManager, gson);
+  }
+
+  @Provides
+  @Singleton
+  PhotosRepository providePhotosRepository() {
+    return new PhotosRepository(Paper.book(PhotosRepository.PHOTOS_BOOK));
   }
 }

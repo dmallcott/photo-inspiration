@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 import com.dmallcott.photoinspiration.base.BaseComponent;
 import com.dmallcott.photoinspiration.data.LocalAssetsManager;
 import com.dmallcott.photoinspiration.data.PexelsManager;
+import com.dmallcott.photoinspiration.data.PhotosRepository;
 import dagger.Component;
 import io.reactivex.Scheduler;
 import javax.inject.Named;
@@ -17,6 +18,8 @@ public interface ApplicationComponent extends BaseComponent {
   Context context();
 
   PexelsManager pexelsManager();
+
+  PhotosRepository photosRepository();
 
   AssetManager assetManager();
 

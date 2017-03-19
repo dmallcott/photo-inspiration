@@ -15,6 +15,8 @@ ext.versions = [
         rxLint: '1.0',
         rxBinding: '1.0.0',
         autoValue: '1.2',
+        autoValueGson: "0.4.6",
+        autoValueParcelable: "0.2.5",
         timber: "4.3.1",
         butterknife: "8.4.0",
         threeTenAndroid: "1.0.4",
@@ -24,9 +26,9 @@ ext.versions = [
         calligraphy: "2.2.0",
         paperwork: "1.2.7",
         gson: "2.8.0",
-        autoValueGson: "0.4.6",
         picasso: "2.5.2",
         firebase: "10.0.1",
+        paperdb: "2.0",
 
         // Testing / debug
         jUnit: '4.12',
@@ -64,6 +66,8 @@ ext.library = [
         rxLint: "nl.littlerobots.rxlint:rxlint:$versions.rxLint",
         rxBinding: "com.jakewharton.rxbinding:rxbinding:$versions.rxBinding",
         autoValue: "com.google.auto.value:auto-value:$versions.autoValue",
+        autoValueGson: "com.ryanharter.auto.value:auto-value-gson:$versions.autoValueGson",
+        autoValueParcelable: "com.ryanharter.auto.value:auto-value-parcel:$versions.autoValueParcelable",
         timber: "com.jakewharton.timber:timber:$versions.timber",
         butterknife: "com.jakewharton:butterknife:$versions.butterknife",
         butterknifeCompiler: "com.jakewharton:butterknife-compiler:$versions.butterknife",
@@ -76,9 +80,9 @@ ext.library = [
         calligraphy: "uk.co.chrisjenx:calligraphy:$versions.calligraphy",
         paperwork: "hu.supercluster:paperwork:$versions.paperwork",
         gson: "com.google.code.gson:gson:$versions.gson",
-        autoValueGson: "com.ryanharter.auto.value:auto-value-gson:$versions.autoValueGson",
         picasso: "com.squareup.picasso:picasso:$versions.picasso",
         firebase: "com.google.firebase:firebase-core:$versions.firebase",
+        paperdb: "io.paperdb:paperdb:$versions.paperdb",
 
         // Testing / debug
         jUnit: "junit:junit:$versions.jUnit",

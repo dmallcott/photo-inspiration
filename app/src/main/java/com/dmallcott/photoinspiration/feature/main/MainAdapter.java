@@ -15,6 +15,8 @@ import com.dmallcott.photoinspiration.data.model.Message;
 import com.dmallcott.photoinspiration.data.model.Photo;
 import com.dmallcott.photoinspiration.feature.main.views.MaskedGradientView;
 import com.dmallcott.photoinspiration.feature.main.views.MaskedImageView;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -27,6 +29,8 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
   @NonNull private final Context context;
   @NonNull private final DisplayMetrics displayMetrics;
   @NonNull private final List<Object> dataSet;
+
+  private final PublishSubject<Photo> photoClickedSubject = PublishSubject.create();
 
   @Inject
   public MainAdapter(@NonNull final Context context, @NonNull final Display display) {
@@ -49,12 +53,29 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     notifyItemRangeChanged(previousSize, dataSet.size());
   }
 
+  public void clearPhotos() {
+    if (!dataSet.isEmpty()) {
+      dataSet.subList(1, dataSet.size()).clear();
+      notifyDataSetChanged();
+    }
+  }
+
+  public Observable<Photo> onPhotoClicked() {
+    return photoClickedSubject;
+  }
+
   @Override
   public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
     if (viewType == PHOTO_TYPE) {
-      return new MainViewHolder(
-          LayoutInflater.from(context).inflate(R.layout.item_main_grid, parent, false)
-      );
+
+      final View view = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_main_grid, parent, false);
+      final MainViewHolder viewHolder = new MainViewHolder(view);
+
+      view.setOnClickListener(ignored ->
+          photoClickedSubject.onNext((Photo) dataSet.get(viewHolder.getAdapterPosition())));
+
+      return viewHolder;
     } else {
       return new GradientViewHolder(
           LayoutInflater.from(context).inflate(R.layout.item_gradient, parent, false)

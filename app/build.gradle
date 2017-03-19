@@ -77,6 +77,12 @@ android {
         }
     }
 
+    configurations.all {
+        resolutionStrategy {
+            force 'org.objenesis:objenesis:2.2' // Required for PaperDb
+        }
+    }
+
     // Required for RxJava 1 and 2 coexistence
     packagingOptions {
         exclude 'META-INF/rxjava.properties'
@@ -93,6 +99,8 @@ dependencies {
 
     provided library.autoValue
     annotationProcessor library.autoValue
+    provided library.autoValueGson
+    annotationProcessor library.autoValueParcelable
 
     debugCompile library.leakCanary
     releaseCompile library.leakCanaryNoOp
@@ -113,7 +121,6 @@ dependencies {
 
     compile library.gson
     annotationProcessor library.autoValueGson
-    provided library.autoValueGson
 
     compile library.picasso
 
@@ -128,6 +135,7 @@ dependencies {
     androidTestCompile(name: 'cloudtestingscreenshotter_lib', ext: 'aar')
 
     compile library.firebase
+    compile library.paperdb
 
     compile library.retrofit
     compile library.retrofitGsonConverter

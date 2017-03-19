@@ -12,6 +12,7 @@ import com.dmallcott.photoinspiration.base.BaseActivityComponent;
 import com.dmallcott.photoinspiration.base.BasePresenter;
 import com.dmallcott.photoinspiration.data.model.Message;
 import com.dmallcott.photoinspiration.data.model.Photo;
+import com.dmallcott.photoinspiration.feature.detail.DetailActivity;
 import com.dmallcott.photoinspiration.feature.main.MainPresenter.View;
 import com.dmallcott.photoinspiration.feature.main.views.MaskedImageView;
 import io.reactivex.Observable;
@@ -60,8 +61,23 @@ public class MainActivity extends BaseActivity<View> implements MainPresenter.Vi
   }
 
   @Override
+  public void openDetailView(Photo photo) {
+    startActivity(DetailActivity.getStartIntent(this, photo));
+  }
+
+  @Override
+  public void clearPhotos() {
+    adapter.clearPhotos();
+  }
+
+  @Override
   public Observable<Integer> onPageRequested() {
     return pageRequestSubject;
+  }
+
+  @Override
+  public Observable<Photo> onPhotoClicked() {
+    return adapter.onPhotoClicked();
   }
 
   @Override
@@ -85,5 +101,4 @@ public class MainActivity extends BaseActivity<View> implements MainPresenter.Vi
   protected void onInject(BaseActivityComponent component) {
     component.inject(this);
   }
-
 }
