@@ -1,13 +1,17 @@
 package com.dmallcott.photoinspiration.data.service;
 
 import android.support.annotation.NonNull;
+
 import com.dmallcott.photoinspiration.BuildConfig;
 import com.dmallcott.photoinspiration.data.json.PhotosResponse;
 import com.google.gson.Gson;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import io.reactivex.Observable;
+
 import java.io.IOException;
+
 import javax.inject.Singleton;
+
+import io.reactivex.Observable;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,6 +26,7 @@ import retrofit2.http.Query;
 @Singleton
 public interface PexelsService {
 
+  // TODO : Move to buildconfig
   String ENDPOINT = "http://api.pexels.com/v1/";
 
   @GET("popular")

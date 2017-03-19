@@ -4,7 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.support.annotation.NonNull;
-import com.dmallcott.photoinspiration.data.JsonManager;
+import com.dmallcott.photoinspiration.data.LocalAssetsManager;
 import com.dmallcott.photoinspiration.data.PhotosRepository;
 import com.dmallcott.photoinspiration.data.json.ApplicationAdapterFactory;
 import com.dmallcott.photoinspiration.data.service.PexelsService;
@@ -69,8 +69,8 @@ public class ApplicationModule {
   }
 
   @Provides
-  JsonManager provideJsonManager(AssetManager assetManager, Gson gson) {
-    return new JsonManager(assetManager, gson);
+  LocalAssetsManager provideJLocalAssetsManager(AssetManager assetManager, Gson gson) {
+    return new LocalAssetsManager(assetManager, gson);
   }
 
   @Provides

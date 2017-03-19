@@ -9,5 +9,4 @@ public abstract class ApplicationAdapterFactory implements TypeAdapterFactory {
   public static TypeAdapterFactory create() {
     return new AutoValueGson_ApplicationAdapterFactory();
   }
-
 }

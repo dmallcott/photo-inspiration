@@ -1,6 +1,6 @@
 package com.dmallcott.photoinspiration.data;
 
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -9,10 +9,10 @@ import com.dmallcott.photoinspiration.data.json.PhotosResponse;
 import com.dmallcott.photoinspiration.data.service.PexelsService;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
+import io.reactivex.schedulers.Schedulers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
-import io.reactivex.schedulers.Schedulers;
 
 public class PexelsManagerTest {
 
@@ -28,7 +28,6 @@ public class PexelsManagerTest {
 
   @Test
   public void getPopularPhotos_nonNullReturn() throws Exception {
-
     final PhotosResponse photosResponse = PhotosResponseFactory.makePhotosResponse();
 
     when(service.getPopularPhotos(anyInt())).thenReturn(

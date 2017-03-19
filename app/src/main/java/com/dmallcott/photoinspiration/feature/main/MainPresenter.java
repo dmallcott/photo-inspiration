@@ -1,22 +1,26 @@
 package com.dmallcott.photoinspiration.feature.main;
 
 import android.support.annotation.NonNull;
+
 import com.dmallcott.photoinspiration.application.ApplicationModule;
 import com.dmallcott.photoinspiration.base.BaseActivityScope;
 import com.dmallcott.photoinspiration.base.BasePresenter;
 import com.dmallcott.photoinspiration.base.BaseView;
-import com.dmallcott.photoinspiration.data.JsonManager;
+import com.dmallcott.photoinspiration.data.LocalAssetsManager;
 import com.dmallcott.photoinspiration.data.PexelsManager;
 import com.dmallcott.photoinspiration.data.PhotosRepository;
 import com.dmallcott.photoinspiration.data.json.PhotosResponse;
 import com.dmallcott.photoinspiration.data.model.Message;
 import com.dmallcott.photoinspiration.data.model.Photo;
 import com.dmallcott.photoinspiration.feature.main.MainPresenter.View;
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
+
 import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import timber.log.Timber;
 
 @BaseActivityScope
@@ -30,14 +34,14 @@ public class MainPresenter extends BasePresenter<View> {
 
   @Inject
   public MainPresenter(@NonNull final PexelsManager pexelsManager,
+      @NonNull final LocalAssetsManager localAssetsManager,
       @NonNull final PhotosRepository photosRepository,
-      @NonNull final JsonManager jsonManager,
       @Named(ApplicationModule.UI_SCHEDULER) @NonNull final Scheduler uiScheduler) {
 
     this.pexelsManager = pexelsManager;
     this.photosRepository = photosRepository;
     this.uiScheduler = uiScheduler;
-    this.messages = jsonManager.getMessages();
+    this.messages = localAssetsManager.getMessages();
   }
 
   @Override
@@ -47,16 +51,16 @@ public class MainPresenter extends BasePresenter<View> {
     disposeOnViewDetach(
         view.onPageRequested()
             .startWith(1)
+            .filter(current -> current >= 0)
             .doOnNext(current -> {
-              final int i = (current - 1) % messages.size();
+              view.showLoading(
+                  current <= messages.size() ?
+                      messages.get(current - 1) :
+                      messages.get(1 + (current % messages.size()))
+              );
 
-              if (current == 1 && i == 0) {
-                // TODO: Hardcoding this behaviour for the moment
-                view.showLoading(Message
-                    .create("HEY AGAIN", "Ready for more inspiration?", "#8BFCFE", "#64A1FF"));
+              if (current == 1) {
                 view.showPhotos(photosRepository.getSavedPhotos());
-              } else {
-                view.showLoading(messages.get(i));
               }
             })
             .switchMap(pexelsManager::getPopularPhotos)

@@ -6,6 +6,7 @@ import com.dmallcott.photoinspiration.data.model.Photo;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 @AutoValue
@@ -17,11 +18,13 @@ public abstract class PhotosResponse {
 
   public abstract int total_results();
 
+  @SerializedName("prev_page")
   @Nullable
-  public abstract String prev_page();
+  public abstract String previousPage();
 
+  @SerializedName("next_page")
   @Nullable
-  public abstract String next_page();
+  public abstract String nextPage();
 
   public abstract List<Photo> photos();
 
