@@ -1,6 +1,7 @@
 package com.dmallcott.photoinspiration.base;
 
 import com.dmallcott.photoinspiration.application.ApplicationComponent;
+import com.dmallcott.photoinspiration.feature.detail.DetailActivity;
 import com.dmallcott.photoinspiration.feature.main.MainActivity;
 import dagger.Component;
 
@@ -9,4 +10,6 @@ import dagger.Component;
 public interface BaseActivityComponent {
 
   void inject(MainActivity activity);
+
+  void inject(DetailActivity activity);
 }

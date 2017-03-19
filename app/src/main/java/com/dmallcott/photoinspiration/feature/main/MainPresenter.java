@@ -60,6 +60,8 @@ public class MainPresenter extends BasePresenter<View> {
             .observeOn(uiScheduler)
             .subscribe(view::showPhotos)
     );
+
+    disposeOnViewDetach(view.onPhotoClicked().doOnNext(view::openDetailView).subscribe());
   }
 
   interface View extends BaseView {
@@ -68,6 +70,10 @@ public class MainPresenter extends BasePresenter<View> {
 
     void showPhotos(List<Photo> photos);
 
+    void openDetailView(Photo photo);
+
     Observable<Integer> onPageRequested();
+
+    Observable<Photo> onPhotoClicked();
   }
 }

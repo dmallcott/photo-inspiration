@@ -1,12 +1,13 @@
 package com.dmallcott.photoinspiration.data.model;
 
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
 @AutoValue
-public abstract class Photo {
+public abstract class Photo implements Parcelable {
 
   public abstract int width();
 
@@ -29,7 +30,7 @@ public abstract class Photo {
   }
 
   @AutoValue
-  public static abstract class Sources {
+  public static abstract class Sources implements Parcelable {
 
     public abstract String original();
 

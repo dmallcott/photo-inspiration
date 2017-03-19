@@ -93,6 +93,8 @@ dependencies {
 
     provided library.autoValue
     annotationProcessor library.autoValue
+    provided library.autoValueGson
+    annotationProcessor library.autoValueParcelable
 
     debugCompile library.leakCanary
     releaseCompile library.leakCanaryNoOp
@@ -113,7 +115,6 @@ dependencies {
 
     compile library.gson
     annotationProcessor library.autoValueGson
-    provided library.autoValueGson
 
     compile library.picasso
 
