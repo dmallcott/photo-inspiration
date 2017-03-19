@@ -28,6 +28,7 @@ ext.versions = [
         gson: "2.8.0",
         picasso: "2.5.2",
         firebase: "10.0.1",
+        paperdb: "2.0",
 
         // Testing / debug
         jUnit: '4.12',
@@ -81,6 +82,7 @@ ext.library = [
         gson: "com.google.code.gson:gson:$versions.gson",
         picasso: "com.squareup.picasso:picasso:$versions.picasso",
         firebase: "com.google.firebase:firebase-core:$versions.firebase",
+        paperdb: "io.paperdb:paperdb:$versions.paperdb",
 
         // Testing / debug
         jUnit: "junit:junit:$versions.jUnit",
