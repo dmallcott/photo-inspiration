@@ -66,6 +66,11 @@ public class MainActivity extends BaseActivity<View> implements MainPresenter.Vi
   }
 
   @Override
+  public void clearPhotos() {
+    adapter.clearPhotos();
+  }
+
+  @Override
   public Observable<Integer> onPageRequested() {
     return pageRequestSubject;
   }

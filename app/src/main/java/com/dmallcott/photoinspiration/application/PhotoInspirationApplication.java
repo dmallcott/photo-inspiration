@@ -4,6 +4,9 @@ import android.app.Application;
 import com.dmallcott.photoinspiration.BuildConfig;
 import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
+import com.squareup.picasso.LruCache;
+import com.squareup.picasso.Picasso;
+import io.paperdb.Paper;
 import timber.log.Timber;
 
 public class PhotoInspirationApplication extends Application {
@@ -16,6 +19,7 @@ public class PhotoInspirationApplication extends Application {
     initialiseLeakCanary();
     Stetho.initializeWithDefaults(this);
     setupTimber();
+    initialisePicasso();
   }
 
   protected ApplicationComponent createComponent() {
@@ -39,5 +43,15 @@ public class PhotoInspirationApplication extends Application {
       return;
     }
     LeakCanary.install(this);
+  }
+
+  private void initialisePicasso() {
+    final int PICASSO_DISK_CACHE_SIZE = 1024 * 1024 * 50; // 50 Mb
+
+    Paper.init(this);
+    Picasso.Builder picassoBuilder = new Picasso.Builder(this)
+        .memoryCache(new LruCache(PICASSO_DISK_CACHE_SIZE));
+
+    Picasso.setSingletonInstance(picassoBuilder.build());
   }
 }

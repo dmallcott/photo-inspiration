@@ -53,6 +53,13 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     notifyItemRangeChanged(previousSize, dataSet.size());
   }
 
+  public void clearPhotos() {
+    if (!dataSet.isEmpty()) {
+      dataSet.subList(1, dataSet.size()).clear();
+      notifyDataSetChanged();
+    }
+  }
+
   public Observable<Photo> onPhotoClicked() {
     return photoClickedSubject;
   }
