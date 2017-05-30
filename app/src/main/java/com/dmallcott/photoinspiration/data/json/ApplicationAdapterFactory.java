@@ -6,7 +6,7 @@ import com.ryanharter.auto.value.gson.GsonTypeAdapterFactory;
 @GsonTypeAdapterFactory
 public abstract class ApplicationAdapterFactory implements TypeAdapterFactory {
 
-  public static TypeAdapterFactory create() {
-    return new AutoValueGson_ApplicationAdapterFactory();
-  }
+    public static TypeAdapterFactory create() {
+        return new AutoValueGson_ApplicationAdapterFactory();
+    }
 }

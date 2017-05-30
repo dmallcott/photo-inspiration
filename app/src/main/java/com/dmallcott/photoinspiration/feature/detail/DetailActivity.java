@@ -6,71 +6,77 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
-import butterknife.BindView;
+
 import com.dmallcott.photoinspiration.R;
 import com.dmallcott.photoinspiration.base.BaseActivity;
 import com.dmallcott.photoinspiration.base.BaseActivityComponent;
 import com.dmallcott.photoinspiration.base.BasePresenter;
 import com.dmallcott.photoinspiration.data.model.Photo;
 import com.squareup.picasso.Picasso;
+
 import javax.inject.Inject;
 
+import butterknife.BindView;
+
 public class DetailActivity extends BaseActivity<DetailPresenter.View> implements
-    DetailPresenter.View {
+        DetailPresenter.View {
 
-  public static final String EXTRA_PHOTO = "extra_photo";
+    public static final String EXTRA_PHOTO = "extra_photo";
 
-  @BindView(R.id.toolbar) Toolbar toolbar;
-  @BindView(R.id.detailActivity_image) ImageView imageView;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.detailActivity_image)
+    ImageView imageView;
 
-  @Inject DetailPresenter presenter;
+    @Inject
+    DetailPresenter presenter;
 
-  public static Intent getStartIntent(@NonNull final Context context, @NonNull final Photo photo) {
-    final Intent intent = new Intent(context, DetailActivity.class);
-    intent.putExtra(EXTRA_PHOTO, photo);
-    return intent;
-  }
+    public static Intent getStartIntent(@NonNull final Context context, @NonNull final Photo photo) {
+        final Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra(EXTRA_PHOTO, photo);
+        return intent;
+    }
 
-  private Photo getPhotoFromIntent() {
-    return (Photo) getIntent().getParcelableExtra(EXTRA_PHOTO);
-  }
+    private Photo getPhotoFromIntent() {
+        return (Photo) getIntent().getParcelableExtra(EXTRA_PHOTO);
+    }
 
-  @Override
-  protected void onInitialize() {
-    super.onInitialize();
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
-    toolbar.setTitle("");
-    setSupportActionBar(toolbar);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-    DisplayMetrics metrics = new DisplayMetrics();
-    getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
-    // TODO : add loading animation
-    Picasso.with(this).load(getPhotoFromIntent().src().original())
-        .resize(metrics.widthPixels, 0)
-        .into(imageView);
-  }
+        // TODO : add loading animation
+        Picasso.with(this).load(getPhotoFromIntent().src().original())
+                .resize(metrics.widthPixels, 0)
+                .into(imageView);
+    }
 
-  @Override
-  protected void onInject(BaseActivityComponent component) {
-    component.inject(this);
-  }
+    @Override
+    protected void onInject(BaseActivityComponent component) {
+        component.inject(this);
+    }
 
-  @Override
-  protected int getLayoutId() {
-    return R.layout.activity_detail;
-  }
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_detail;
+    }
 
-  @NonNull
-  @Override
-  protected BasePresenter<DetailPresenter.View> getPresenter() {
-    return presenter;
-  }
+    @NonNull
+    @Override
+    protected BasePresenter<DetailPresenter.View> getPresenter() {
+        return presenter;
+    }
 
-  @NonNull
-  @Override
-  protected DetailPresenter.View getPresenterView() {
-    return this;
-  }
+    @NonNull
+    @Override
+    protected DetailPresenter.View getPresenterView() {
+        return this;
+    }
 }

@@ -26,43 +26,43 @@ import retrofit2.http.Query;
 @Singleton
 public interface PexelsService {
 
-  // TODO : Move to buildconfig
-  String ENDPOINT = "http://api.pexels.com/v1/";
+    // TODO : Move to buildconfig
+    String ENDPOINT = "http://api.pexels.com/v1/";
 
-  @GET("popular")
-  Observable<PhotosResponse> getPopularPhotos(@Query("page") int pageNumber);
+    @GET("popular")
+    Observable<PhotosResponse> getPopularPhotos(@Query("page") int pageNumber);
 
-  class Factory {
+    class Factory {
 
-    public static PexelsService makeService(@NonNull final Gson gson) {
-      final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-      final AuthenticationInterceptor authentication = new AuthenticationInterceptor();
-      logging.setLevel(BuildConfig.DEBUG ? Level.BODY : Level.NONE);
+        public static PexelsService makeService(@NonNull final Gson gson) {
+            final HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            final AuthenticationInterceptor authentication = new AuthenticationInterceptor();
+            logging.setLevel(BuildConfig.DEBUG ? Level.BODY : Level.NONE);
 
-      final OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-          .addInterceptor(logging)
-          .addInterceptor(authentication)
-          .build();
+            final OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                    .addInterceptor(logging)
+                    .addInterceptor(authentication)
+                    .build();
 
-      Retrofit retrofit = new Retrofit.Builder()
-          .baseUrl(ENDPOINT)
-          .addConverterFactory(GsonConverterFactory.create(gson))
-          .client(okHttpClient)
-          .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-          .build();
-      return retrofit.create(PexelsService.class);
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(okHttpClient)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .build();
+            return retrofit.create(PexelsService.class);
+        }
     }
-  }
 
-  class AuthenticationInterceptor implements Interceptor {
+    class AuthenticationInterceptor implements Interceptor {
 
-    private static final String AUTH_HEADER = "Authorization";
+        private static final String AUTH_HEADER = "Authorization";
 
-    @Override
-    public Response intercept(Chain chain) throws IOException {
-      Request request = chain.request().newBuilder()
-          .addHeader(AUTH_HEADER, BuildConfig.PEXELS_API_KEY).build();
-      return chain.proceed(request);
+        @Override
+        public Response intercept(Chain chain) throws IOException {
+            Request request = chain.request().newBuilder()
+                    .addHeader(AUTH_HEADER, BuildConfig.PEXELS_API_KEY).build();
+            return chain.proceed(request);
+        }
     }
-  }
 }
