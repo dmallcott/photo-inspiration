@@ -26,74 +26,77 @@ import timber.log.Timber;
 @BaseActivityScope
 public class MainPresenter extends BasePresenter<View> {
 
-  @NonNull private final PexelsManager pexelsManager;
-  @NonNull private final PhotosRepository photosRepository;
-  @NonNull private final Scheduler uiScheduler;
-  
-  private final List<Message> messages;
+    @NonNull
+    private final PexelsManager pexelsManager;
+    @NonNull
+    private final PhotosRepository photosRepository;
+    @NonNull
+    private final Scheduler uiScheduler;
 
-  @Inject
-  public MainPresenter(@NonNull final PexelsManager pexelsManager,
-      @NonNull final LocalAssetsManager localAssetsManager,
-      @NonNull final PhotosRepository photosRepository,
-      @Named(ApplicationModule.UI_SCHEDULER) @NonNull final Scheduler uiScheduler) {
+    private final List<Message> messages;
 
-    this.pexelsManager = pexelsManager;
-    this.photosRepository = photosRepository;
-    this.uiScheduler = uiScheduler;
-    this.messages = localAssetsManager.getMessages();
-  }
+    @Inject
+    public MainPresenter(@NonNull final PexelsManager pexelsManager,
+                         @NonNull final LocalAssetsManager localAssetsManager,
+                         @NonNull final PhotosRepository photosRepository,
+                         @Named(ApplicationModule.UI_SCHEDULER) @NonNull final Scheduler uiScheduler) {
 
-  @Override
-  public void onViewAttached(@NonNull View view) {
-    super.onViewAttached(view);
+        this.pexelsManager = pexelsManager;
+        this.photosRepository = photosRepository;
+        this.uiScheduler = uiScheduler;
+        this.messages = localAssetsManager.getMessages();
+    }
 
-    disposeOnViewDetach(
-        view.onPageRequested()
-            .startWith(1)
-            .filter(current -> current >= 0)
-            .doOnNext(current -> {
-              view.showLoading(
-                  current <= messages.size() ?
-                      messages.get(current - 1) :
-                      messages.get(1 + (current % messages.size()))
-              );
+    @Override
+    public void onViewAttached(@NonNull View view) {
+        super.onViewAttached(view);
 
-              if (current == 1) {
-                view.showPhotos(photosRepository.getSavedPhotos());
-              }
-            })
-            .switchMap(pexelsManager::getPopularPhotos)
-            .observeOn(uiScheduler)
-            .doOnNext(response -> {
-              if (response.page() == 1) {
-                view.clearPhotos();
-                photosRepository.clearSavedPhotos();
-              }
+        disposeOnViewDetach(
+                view.onPageRequested()
+                        .startWith(1)
+                        .filter(current -> current >= 0)
+                        .doOnNext(current -> {
+                            view.showLoading(
+                                    current <= messages.size() ?
+                                            messages.get(current - 1) :
+                                            messages.get(1 + (current % messages.size()))
+                            );
 
-              photosRepository.savePhotos(response.photos());
-            })
-            .doOnError(Timber::e)
-            .onErrorResumeNext(Observable.empty())
-            .map(PhotosResponse::photos)
-            .subscribe(view::showPhotos)
-    );
+                            if (current == 1) {
+                                view.showPhotos(photosRepository.getSavedPhotos());
+                            }
+                        })
+                        .switchMap(pexelsManager::getPopularPhotos)
+                        .observeOn(uiScheduler)
+                        .doOnNext(response -> {
+                            if (response.page() == 1) {
+                                view.clearPhotos();
+                                photosRepository.clearSavedPhotos();
+                            }
 
-    disposeOnViewDetach(view.onPhotoClicked().doOnNext(view::openDetailView).subscribe());
-  }
+                            photosRepository.savePhotos(response.photos());
+                        })
+                        .doOnError(Timber::e)
+                        .onErrorResumeNext(Observable.empty())
+                        .map(PhotosResponse::photos)
+                        .subscribe(view::showPhotos)
+        );
 
-  interface View extends BaseView {
+        disposeOnViewDetach(view.onPhotoClicked().doOnNext(view::openDetailView).subscribe());
+    }
 
-    void showLoading(Message message);
+    interface View extends BaseView {
 
-    void showPhotos(List<Photo> photos);
+        void showLoading(Message message);
 
-    void openDetailView(Photo photo);
+        void showPhotos(List<Photo> photos);
 
-    void clearPhotos();
+        void openDetailView(Photo photo);
 
-    Observable<Integer> onPageRequested();
+        void clearPhotos();
 
-    Observable<Photo> onPhotoClicked();
-  }
+        Observable<Integer> onPageRequested();
+
+        Observable<Photo> onPhotoClicked();
+    }
 }
