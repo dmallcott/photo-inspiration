@@ -1,8 +1,4 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply from: 'dependency.gradle'
-
 buildscript {
-    apply from: 'dependency.gradle'
 
     repositories {
         maven {
@@ -11,18 +7,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath plugin.android
-        classpath plugin.retrolambda
-        classpath plugin.spoon
-        classpath plugin.errorProne
-        classpath plugin.dexCount
-        classpath plugin.jacoco
-        classpath plugin.paperwork
-        classpath plugin.apt
-        classpath plugin.googleServices
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath 'com.android.tools.build:gradle:3.0.0-alpha3'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.2.2'
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:0.6.1'
+        classpath 'org.jacoco:org.jacoco.core:0.7.7.201606060606'
+        classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 

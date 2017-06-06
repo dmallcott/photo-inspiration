@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'com.getkeepsafe.dexcount'
 apply plugin: 'spoon'
-apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'findbugs'
-apply plugin: 'hu.supercluster.paperwork'
 
 apply from: '../config/findbugs.gradle'
 apply from: '../config/pmd.gradle'
 apply from: '../config/jacoco.gradle'
 apply from: '../config/checkstyle.gradle'
+
+apply from: '../dependency.gradle'
 
 android {
     compileSdkVersion versions.androidCompileSdk
@@ -21,16 +20,16 @@ android {
         applicationId packageName
         minSdkVersion versions.androidMinSdk
         targetSdkVersion versions.androidTargetSdk
-        versionCode 1000000
-        versionName "1.0.0"
+        versionCode versions.versionCode
+        versionName versions.versionName
         testInstrumentationRunner packageName + ".application.ApplicationTestRunner"
 
         buildConfigField "String", "PEXELS_API_KEY", getProperties("api.properties")["PEXELS_API_KEY"]
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility versions.sourceCompatibilityVersion
+        targetCompatibility versions.targetCompatibilityVersion
     }
 
     signingConfigs {
@@ -90,59 +89,62 @@ android {
 }
 
 dependencies {
-    compile library.androidSupportAppCompat
-    compile library.androidSupportDesign
-    compile library.androidSupportRecyclerView
+    // Support Libraries
+    compile "com.android.support:appcompat-v7:$versions.androidSupportLibrary"
+    compile "com.android.support:design:$versions.androidSupportLibrary"
+    compile "com.android.support:recyclerview-v7:$versions.androidSupportLibrary"
 
-    compile library.dagger
-    annotationProcessor library.daggerCompiler
+    // Dagger
+    compile "com.google.dagger:dagger:$versions.dagger"
+    annotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
+    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$versions.dagger"
 
-    provided library.autoValue
-    annotationProcessor library.autoValue
-    provided library.autoValueGson
-    annotationProcessor library.autoValueParcelable
+    // RxStuff
+    compile "io.reactivex.rxjava2:rxjava:$versions.rxJava"
+    compile "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
+    compile "com.github.akarnokd:rxjava2-interop:$versions.rxJavaInterop"
+    compile "nl.littlerobots.rxlint:rxlint:$versions.rxLint"
+    compile "com.jakewharton.rxbinding:rxbinding:$versions.rxBinding"
 
-    debugCompile library.leakCanary
-    releaseCompile library.leakCanaryNoOp
-    testCompile library.leakCanaryNoOp
+    // AutoValue
+    provided "com.google.auto.value:auto-value:$versions.autoValue"
+    annotationProcessor "com.google.auto.value:auto-value:$versions.autoValue"
+    provided "com.ryanharter.auto.value:auto-value-gson:$versions.autoValueGson"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$versions.autoValueGson"
+    annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$versions.autoValueParcelable"
 
-    compile library.stetho
+    // LeakCanary
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$versions.leakCanary"
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakCanary"
+    testCompile "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakCanary"
 
-    compile library.timber
+    // Gson
+    compile "com.google.code.gson:gson:$versions.gson"
 
-    compile library.butterknife
-    annotationProcessor library.butterknifeCompiler
+    // Jake Wharton
+    compile "com.jakewharton.timber:timber:$versions.timber"
+    compile "com.jakewharton:butterknife:$versions.butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$versions.butterknife"
 
-    compile library.rxJava
-    compile library.rxJavaInterop
-    compile library.rxAndroid
-    compile library.rxLint
-    compile library.rxBinding
+    // Square
+    compile "com.squareup.picasso:picasso:$versions.picasso"
+    compile "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    compile "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    compile "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$versions.retrofitRxJavaAdapter"
+    compile "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    compile "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
 
-    compile library.gson
-    annotationProcessor library.autoValueGson
+    // Storage
+    compile "com.google.firebase:firebase-core:$versions.firebase"
+    compile "io.paperdb:paperdb:$versions.paperdb"
 
-    compile library.picasso
-
-    testCompile library.jUnit
-    testCompile library.mockito
-
-    androidTestCompile(library.espressoCore) {
+    // Testing
+    testCompile "junit:junit:$versions.jUnit"
+    testCompile "org.mockito:mockito-core:$versions.mockito"
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$versions.espresso") {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    androidTestAnnotationProcessor library.daggerCompiler
-    androidTestCompile library.spoon
-    androidTestCompile(name: 'cloudtestingscreenshotter_lib', ext: 'aar')
-
-    compile library.firebase
-    compile library.paperdb
-
-    compile library.retrofit
-    compile library.retrofitGsonConverter
-    compile library.retrofitRxJavaAdapter
-
-    compile library.okhttp
-    compile library.okhttpLoggingInterceptor
+    androidTestCompile "com.squareup.spoon:spoon-client:$versions.spoon"
 }
 
 spoon {

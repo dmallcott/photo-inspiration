@@ -3,7 +3,6 @@ package com.dmallcott.photoinspiration.application;
 import android.app.Application;
 
 import com.dmallcott.photoinspiration.BuildConfig;
-import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
@@ -19,7 +18,6 @@ public class PhotoInspirationApplication extends Application {
     public void onCreate() {
         super.onCreate();
         initialiseLeakCanary();
-        Stetho.initializeWithDefaults(this);
         setupTimber();
         initialisePicasso();
     }
