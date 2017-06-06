@@ -1,10 +1,16 @@
 ext.versions = [
-        // Android libs
+        // Application
+        versionCode: 1000000,
+        versionName: "1.0.0",
+        sourceCompatibilityVersion: JavaVersion.VERSION_1_8,
+        targetCompatibilityVersion: JavaVersion.VERSION_1_8,
+
+        // Android
         androidMinSdk: 21,
         androidTargetSdk: 25,
         androidCompileSdk: 25,
         androidBuildTools: '25.0.1',
-        androidSupportLibrary: '25.2.0',
+        androidSupportLibrary: '25.3.1',
         androidSupport: '25.2.0',
 
         // App dependencies
@@ -12,22 +18,19 @@ ext.versions = [
         rxJava: '2.0.1',
         rxJavaInterop: '0.8.3',
         rxAndroid: '2.0.1',
-        rxLint: '1.0',
+        rxLint: '1.2',
         rxBinding: '1.0.0',
         autoValue: '1.2',
         autoValueGson: "0.4.6",
         autoValueParcelable: "0.2.5",
-        timber: "4.3.1",
-        butterknife: "8.4.0",
-        threeTenAndroid: "1.0.4",
+        timber: "4.5.1",
+        butterknife: "8.5.1",
         retrofit: "2.1.0",
         retrofitRxJavaAdapter: "1.0.0",
         okhttp: "3.6.0",
-        calligraphy: "2.2.0",
-        paperwork: "1.2.7",
         gson: "2.8.0",
         picasso: "2.5.2",
-        firebase: "10.0.1",
+        firebase: "10.2.6",
         paperdb: "2.0",
 
         // Testing / debug
@@ -35,74 +38,5 @@ ext.versions = [
         espresso: '2.2.2',
         spoon: '1.7.0',
         leakCanary: '1.5',
-        stetho: "1.4.1",
         mockito: "2.7.9",
-
-        // Gradle plugins
-        androidGradlePlugin: '2.3.0',
-        retrolambdaGradlePlugin: '3.3.1',
-        dexCountGradlePlugin: '0.6.1',
-        spoonGradlePlugin: '1.2.2',
-        errorProneGradlePlugin: '0.0.8',
-        jacocoGradlePlugin: '0.7.7.201606060606',
-        aptGradlePlugin: '1.8',
-
-        googleServices: '3.0.0'
-]
-
-ext.library = [
-        // Android dependencies
-        androidSupportAppCompat: "com.android.support:appcompat-v7:$versions.androidSupportLibrary",
-        androidSupport: "com.android.support:support-v4:$versions.androidSupport",
-        androidSupportDesign: "com.android.support:design:$versions.androidSupportLibrary",
-        androidSupportRecyclerView: "com.android.support:recyclerview-v7:$versions.androidSupportLibrary",
-
-        // App dependencies
-        dagger: "com.google.dagger:dagger:$versions.dagger",
-        daggerCompiler: "com.google.dagger:dagger-compiler:$versions.dagger",
-        rxJava: "io.reactivex.rxjava2:rxjava:$versions.rxJava",
-        rxJavaInterop: "com.github.akarnokd:rxjava2-interop:$versions.rxJavaInterop",
-        rxAndroid: "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",
-        rxLint: "nl.littlerobots.rxlint:rxlint:$versions.rxLint",
-        rxBinding: "com.jakewharton.rxbinding:rxbinding:$versions.rxBinding",
-        autoValue: "com.google.auto.value:auto-value:$versions.autoValue",
-        autoValueGson: "com.ryanharter.auto.value:auto-value-gson:$versions.autoValueGson",
-        autoValueParcelable: "com.ryanharter.auto.value:auto-value-parcel:$versions.autoValueParcelable",
-        timber: "com.jakewharton.timber:timber:$versions.timber",
-        butterknife: "com.jakewharton:butterknife:$versions.butterknife",
-        butterknifeCompiler: "com.jakewharton:butterknife-compiler:$versions.butterknife",
-        threeTenAndroid: "com.jakewharton.threetenabp:threetenabp:$versions.threeTenAndroid",
-        retrofit: "com.squareup.retrofit2:retrofit:$versions.retrofit",
-        retrofitGsonConverter: "com.squareup.retrofit2:converter-gson:$versions.retrofit",
-        retrofitRxJavaAdapter: "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:$versions.retrofitRxJavaAdapter",
-        okhttp: "com.squareup.okhttp3:okhttp:$versions.okhttp",
-        okhttpLoggingInterceptor: "com.squareup.okhttp3:logging-interceptor:$versions.okhttp",
-        calligraphy: "uk.co.chrisjenx:calligraphy:$versions.calligraphy",
-        paperwork: "hu.supercluster:paperwork:$versions.paperwork",
-        gson: "com.google.code.gson:gson:$versions.gson",
-        picasso: "com.squareup.picasso:picasso:$versions.picasso",
-        firebase: "com.google.firebase:firebase-core:$versions.firebase",
-        paperdb: "io.paperdb:paperdb:$versions.paperdb",
-
-        // Testing / debug
-        jUnit: "junit:junit:$versions.jUnit",
-        espressoCore: "com.android.support.test.espresso:espresso-core:$versions.espresso",
-        espressoContrib: "com.android.support.test.espresso:espresso-contrib:$versions.espresso",
-        spoon: "com.squareup.spoon:spoon-client:$versions.spoon",
-        leakCanary: "com.squareup.leakcanary:leakcanary-android:$versions.leakCanary",
-        leakCanaryNoOp: "com.squareup.leakcanary:leakcanary-android-no-op:$versions.leakCanary",
-        stetho: "com.facebook.stetho:stetho:$versions.stetho",
-        mockito: "org.mockito:mockito-core:$versions.mockito",
-]
-
-ext.plugin = [
-        android: "com.android.tools.build:gradle:$versions.androidGradlePlugin",
-        retrolambda: "me.tatarka:gradle-retrolambda:$versions.retrolambdaGradlePlugin",
-        spoon: "com.stanfy.spoon:spoon-gradle-plugin:$versions.spoonGradlePlugin",
-        errorProne: "net.ltgt.gradle:gradle-errorprone-plugin:$versions.errorProneGradlePlugin",
-        dexCount: "com.getkeepsafe.dexcount:dexcount-gradle-plugin:$versions.dexCountGradlePlugin",
-        jacoco: "org.jacoco:org.jacoco.core:$versions.jacocoGradlePlugin",
-        paperwork: "hu.supercluster:paperwork-plugin:$versions.paperwork",
-        apt: "com.neenbedankt.gradle.plugins:android-apt:$versions.aptGradlePlugin",
-        googleServices: "com.google.gms:google-services:$versions.googleServices"
 ]
