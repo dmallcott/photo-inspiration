@@ -78,7 +78,7 @@ public abstract class BaseActivity<V extends BaseView> extends AppCompatActivity
     /**
      * For instrumentation testing purposes a method for overriding a BaseActivity's
      * component has been added. This is sadly because I can't have a test runner that override the
-     * BaseActivity class. Or can I?
+     * BaseActivity class. TODO: Or can I?
      */
     public void setComponent(@NonNull final BaseActivityComponent component) {
         this.activityComponent = component;

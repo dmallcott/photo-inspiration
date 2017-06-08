@@ -36,7 +36,7 @@ ext.versions = [
         // Testing / debug
         jUnit: '4.12',
         espresso: '2.2.2',
-        spoon: '1.7.0',
+        spoon: '1.7.1',
         leakCanary: '1.5',
         mockito: "2.7.9",
 ]

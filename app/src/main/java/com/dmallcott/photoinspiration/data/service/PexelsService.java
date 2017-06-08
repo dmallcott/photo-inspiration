@@ -12,10 +12,12 @@ import java.io.IOException;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import okhttp3.Authenticator;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.Route;
 import okhttp3.logging.HttpLoggingInterceptor;
 import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
@@ -44,13 +46,34 @@ public interface PexelsService {
                     .addInterceptor(authentication)
                     .build();
 
+            okHttpClient.newBuilder().authenticator(new ASDASD(okHttpClient));
+
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(okHttpClient)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
+
             return retrofit.create(PexelsService.class);
+        }
+    }
+
+    class ASDASD implements Authenticator {
+
+        private final OkHttpClient client;
+
+        public ASDASD(OkHttpClient client) {
+            this.client = client;
+        }
+
+        @Override
+        public Request authenticate(Route route, Response response) throws IOException {
+            Request build = new Request.Builder().build();
+            client.newCall();
+
+
+            return null;
         }
     }
 
