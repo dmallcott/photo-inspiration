@@ -14,8 +14,11 @@ import android.util.AttributeSet;
 import com.dmallcott.photoinspiration.data.model.Photo;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.LoadedFrom;
+import com.squareup.picasso.RequestCreator;
 import com.squareup.picasso.Target;
+import com.squareup.picasso.Transformation;
 
+import jp.wasabeef.picasso.transformations.BlurTransformation;
 import timber.log.Timber;
 
 /**
@@ -26,10 +29,13 @@ public class MaskedImageView extends MaskedGradientView {
 
     private final Paint pathPaint;
     private final Paint imagePaint;
+    private final Transformation loadingTransformation;
 
     private Photo photo;
     private Bitmap bitmap;
+    private Bitmap blurryBitmap;
     private Target target;
+    private Target blurryTarget;
 
     public MaskedImageView(Context context) {
         this(context, null);
@@ -45,12 +51,31 @@ public class MaskedImageView extends MaskedGradientView {
         pathPaint.setAntiAlias(true);
         pathPaint.setShadowLayer(SHADOW_HEIGHT, 0f, 0f, Color.BLACK);
 
+        loadingTransformation = new BlurTransformation(context);
+
+        // Not my cleanest code, I know.
+        blurryTarget = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bmp, LoadedFrom from) {
+                blurryBitmap = bmp;
+                invalidate();
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+
         target = new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bmp, LoadedFrom from) {
-                Timber.i("Bitmap loaded from %s", from.name());
                 bitmap = bmp;
-
                 invalidate();
             }
 
@@ -80,7 +105,12 @@ public class MaskedImageView extends MaskedGradientView {
             width = widthSize;
             height = Math.round(photo.height() * ratio);
             Timber.i("Measuring %s with w: %d and h: %d", photo.url(), width, height);
-            Picasso.with(getContext()).load(photo.src().original()).resize(width, height).into(target);
+            if (blurryBitmap == null) {
+                Picasso.with(getContext())
+                        .load(photo.src().small())
+                        .transform(loadingTransformation)
+                        .resize(width, height).into(blurryTarget);
+            }
             setMeasuredDimension(width, height);
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -92,11 +122,14 @@ public class MaskedImageView extends MaskedGradientView {
         super.onDraw(canvas);
 
         if (bitmap != null) {
-            Timber.i("Drawing %s", photo.url());
             canvas.drawBitmap(processImage(bitmap), 0, 0, imagePaint);
+        } else if (blurryBitmap != null ) {
+            canvas.drawBitmap(processImage(blurryBitmap), 0, 0, imagePaint);
+            Picasso.with(getContext()).load(photo.src().original()).resize(canvas.getWidth(), canvas.getHeight()).into(target);
         } else {
             canvas.drawPath(getPath(), imagePaint);
         }
+
     }
 
     private Bitmap processImage(@NonNull final Bitmap bitmap) {
@@ -118,6 +151,7 @@ public class MaskedImageView extends MaskedGradientView {
         }
 
         this.bitmap = null;
+        this.blurryBitmap = null;
         this.photo = photo;
         invalidate();
     }

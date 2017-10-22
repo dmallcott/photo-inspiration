@@ -42,6 +42,8 @@ public class MaskedGradientView extends View {
     private boolean isFirst = false;
     private Message message;
 
+    private int number = 0; // up to getWIdth()
+
     public MaskedGradientView(Context context) {
         this(context, null);
     }
@@ -80,9 +82,7 @@ public class MaskedGradientView extends View {
 
         final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
-        pathPaint.setShader(new LinearGradient(0, 0, widthSize, 0,
-                Color.parseColor(message.startColor()), Color.parseColor(message.endColor()),
-                TileMode.CLAMP));
+
 
         // Based on a predetermined ratio the size is calculated from the 'match_parent' width
         setMeasuredDimension(widthSize, Math.round(widthSize / ratio));
@@ -92,7 +92,12 @@ public class MaskedGradientView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Timber.i("Drawing gradient");
+        if (message != null) {
+            pathPaint.setShader(new LinearGradient(0, 0, number, number,
+                    Color.parseColor(message.startColor()), Color.parseColor(message.endColor()),
+                    TileMode.CLAMP));
+        }
+
         canvas.drawPath(getPath(), shadowPaint);
         canvas.drawPath(getPath(), pathPaint);
 
@@ -148,5 +153,10 @@ public class MaskedGradientView extends View {
 
     public void setFirst(boolean first) {
         isFirst = first;
+    }
+
+    public void updateGradient(float animatedValue) {
+        number = Math.round(animatedValue);
+        invalidate();
     }
 }
