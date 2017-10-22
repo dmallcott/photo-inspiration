@@ -98,13 +98,6 @@ public class MainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if (holder instanceof GradientViewHolder) {
             ((GradientViewHolder) holder).gradient.setFirst(position == 0);
             ((GradientViewHolder) holder).gradient.setMessage(((Message) dataSet.get(position)));
-            ValueAnimator animation = ValueAnimator.ofFloat(0f, 720);
-            animation.setDuration(5000);
-            animation.addUpdateListener(valueAnimator -> {
-                float animatedValue = (float) valueAnimator.getAnimatedValue();
-                ((GradientViewHolder) holder).gradient.updateGradient(animatedValue);
-            });
-            animation.start();
         }
     }
 

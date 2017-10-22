@@ -1,5 +1,6 @@
 package com.dmallcott.photoinspiration.feature.main.views;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -10,22 +11,23 @@ import android.graphics.Shader.TileMode;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.animation.LinearOutSlowInInterpolator;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.animation.Interpolator;
 
 import com.dmallcott.photoinspiration.data.model.Message;
 
 import java.util.Random;
 
-import timber.log.Timber;
-
 public class MaskedGradientView extends View {
 
     public final static int OFFSET = 120; // Forced to do this due to the way itemDecoration works
     private final static int MINIMUM_SLOPE = 40;
+    private final static int ANIMATION_DURATION = 3000;
     protected final static int SHADOW_HEIGHT = 10;
 
     private final float ratio;
@@ -42,7 +44,9 @@ public class MaskedGradientView extends View {
     private boolean isFirst = false;
     private Message message;
 
-    private int number = 0; // up to getWIdth()
+    private int number = 0; // up to getWidth()
+
+    private ValueAnimator animator;
 
     public MaskedGradientView(Context context) {
         this(context, null);
@@ -75,6 +79,13 @@ public class MaskedGradientView extends View {
         bodyPaint.setAntiAlias(true);
         bodyPaint.setTextSize(18 * getResources().getDisplayMetrics().density);
         bodyPaint.setColor(Color.WHITE);
+
+        final Interpolator interpolator = new LinearOutSlowInInterpolator();
+
+        animator = new ValueAnimator();
+        animator.setInterpolator(interpolator);
+        animator.setDuration(ANIMATION_DURATION);
+        animator.addUpdateListener(valueAnimator -> updateGradient((float) valueAnimator.getAnimatedValue()));
     }
 
     @Override
@@ -82,10 +93,13 @@ public class MaskedGradientView extends View {
 
         final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
 
-
-
         // Based on a predetermined ratio the size is calculated from the 'match_parent' width
         setMeasuredDimension(widthSize, Math.round(widthSize / ratio));
+
+        if (message != null) {
+            animator.setFloatValues(0f, getWidth() / 2);
+            animator.start();
+        }
     }
 
     @Override
